@@ -1,11 +1,27 @@
+﻿using System.Reflection;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Infra.Questoes.mapeamentos;
 using NHibernate;
-using ISession = NHibernate.ISession;
 using Scrutor;
+using ISession = NHibernate.ISession;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.Scan(scan => scan
+    .FromAssemblies(
+        Assembly.Load("Aplicacao"),
+        Assembly.Load("Dominio"),
+        Assembly.Load("Infra") 
+    )
+    .AddClasses(classes => classes.Where(type =>
+        type.Name.EndsWith("AppService") ||
+        type.Name.EndsWith("Service") ||
+        type.Name.EndsWith("Repositorio"))) 
+    .AsImplementedInterfaces()
+    .WithScopedLifetime()
+);
 
 // Add services to the container.
 
