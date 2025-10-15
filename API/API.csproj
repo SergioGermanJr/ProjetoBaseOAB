@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentNHibernate" Version="3.4.1" />
+    <PackageReference Include="Scrutor" Version="6.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
@@ -15,6 +16,7 @@
     <ProjectReference Include="..\Dominio\Dominio.csproj" />
     <ProjectReference Include="..\Infra\Infra.csproj" />
     <ProjectReference Include="..\Aplicacao\Aplicacao.csproj" />
+    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
-﻿using Dominio.Questoes;
+﻿using Aplicacao.Questoes.Servicos.Interfaces;
+using DataTransfer.Questoes.Requests;
+using Dominio.Questoes.Entidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ISession = NHibernate.ISession;
@@ -9,14 +11,16 @@ namespace API.Controllers.Questoes
     [ApiController]
     public class QuestaoController : ControllerBase
     {
-        private readonly ISession session;
-        public QuestaoController(ISession session)
+        private readonly IQuestaoAppService questaoAppService;
+        public QuestaoController(IQuestaoAppService questaoAppService)
         {
-            this.session = session;
+            this.questaoAppService = questaoAppService;
         }
-        [HttpGet]
-        public ActionResult Questao() {
-            return Ok(session.Query<Questao>());
+        [HttpGet("Id")]
+        public async Task<ActionResult> Questao(int Id) {
+            return Ok(await questaoAppService.ValidarAsync(Id));
         }
+
+        
     }
 }

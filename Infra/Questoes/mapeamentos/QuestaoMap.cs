@@ -1,5 +1,4 @@
-﻿
-using Dominio.Questoes;
+﻿using Dominio.Questoes.Entidades;
 using FluentNHibernate.Mapping;
 
 

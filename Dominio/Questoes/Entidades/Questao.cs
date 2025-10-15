@@ -1,4 +1,4 @@
-﻿namespace Dominio.Questoes
+﻿namespace Dominio.Questoes.Entidades
 {
     public class Questao
     {
@@ -10,7 +10,7 @@
             setTexto(texto);
         }
         public virtual void setTexto(string texto) { 
-            this.Texto = texto;
+            Texto = texto;
         }
     }
 }

@@ -3,6 +3,7 @@ using FluentNHibernate.Cfg.Db;
 using Infra.Questoes.mapeamentos;
 using NHibernate;
 using ISession = NHibernate.ISession;
+using Scrutor;
 
 var builder = WebApplication.CreateBuilder(args);
 
