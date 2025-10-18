@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio.Questoes.Entidades;
+using Dominio.Utils.Repositorios;
 
 namespace Dominio.Questoes.Repositorios.Interfaces
 {
-    public interface IQuestaoRepositorio
+    public interface IQuestaoRepositorio: INhibernateRepositorio<Questao>
     {
-        IEnumerable<Questao> Query();
 
-        Task<Questao> RecuperarAsync(int id);
     }
 }

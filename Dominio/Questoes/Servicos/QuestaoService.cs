@@ -19,8 +19,7 @@ namespace Dominio.Questoes.Servicos
         public async Task<Questao> ValidarAsync(int id)
         {
             Questao questao = await this.questaoRepositorio.RecuperarAsync(id);
-
-            if(questao == null)
+            if (questao == null)
                 throw new Exception("Questão não encontrada");
 
             return questao;
