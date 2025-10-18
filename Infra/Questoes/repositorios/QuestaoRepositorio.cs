@@ -1,24 +1,14 @@
 ﻿using Dominio.Questoes.Entidades;
 using Dominio.Questoes.Repositorios.Interfaces;
+using Infra.Utils.Repositorios;
 using ISession = NHibernate.ISession;
 
 namespace Infra.Questoes.repositorios
 {
-    public class QuestaoRepositorio : IQuestaoRepositorio
+    public class QuestaoRepositorio : NhibernateRepositorio<Questao>, IQuestaoRepositorio
     {
-        private readonly ISession session;
-        public QuestaoRepositorio(ISession session) { 
-            this.session = session;
-        }
-
-        public IEnumerable<Questao> Query()
+        public QuestaoRepositorio(ISession session) : base(session)
         {
-            return this.session.Query<Questao>();
-        }
-
-        public Task<Questao> RecuperarAsync(int id)
-        {
-            return this.session.GetAsync<Questao>(id);
         }
     }
 }
