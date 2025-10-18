@@ -9,16 +9,16 @@ using ISession = NHibernate.ISession;
 var builder = WebApplication.CreateBuilder(args);
 
 
+var assemblies = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
+    .Select(Assembly.LoadFrom)
+    .ToArray();
+
 builder.Services.Scan(scan => scan
-    .FromAssemblies(
-        Assembly.Load("Aplicacao"),
-        Assembly.Load("Dominio"),
-        Assembly.Load("Infra") 
-    )
+    .FromAssemblies(assemblies)
     .AddClasses(classes => classes.Where(type =>
         type.Name.EndsWith("AppService") ||
         type.Name.EndsWith("Service") ||
-        type.Name.EndsWith("Repositorio"))) 
+        type.Name.EndsWith("Repositorio")))
     .AsImplementedInterfaces()
     .WithScopedLifetime()
 );
