@@ -2,6 +2,7 @@
 {
     public class QuestaoInserirComando
     {
-        string Texto { get; set; }
+        public string Texto { get; set; }
+        public IList<RespostaQuestaoInserirComando> Respostas { get; set; } = new List<RespostaQuestaoInserirComando>();
     }
 }

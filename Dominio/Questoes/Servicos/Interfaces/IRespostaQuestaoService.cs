@@ -7,6 +7,5 @@ namespace Dominio.Questoes.Servicos.Interfaces
     {
         Task<RespostaQuestao> ValidarAsync(int id);
 
-        Task<RespostaQuestao> InserirAsync(Questao questao, RespostaQuestaoInserirComando comando);
     }
 }

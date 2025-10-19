@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dominio.Questoes.comandos;
 using Dominio.Questoes.Entidades;
 using Dominio.Questoes.Repositorios.Interfaces;
 using Dominio.Questoes.Servicos.Interfaces;
@@ -17,9 +18,20 @@ namespace Dominio.Questoes.Servicos
             this.questaoRepositorio = questaoRepositorio;
         }
 
-        public async Task<Questao> InserirAsync(string texto)
+        public async Task<Questao> InserirAsync(QuestaoInserirComando comando)
         {
-            Questao questao = new (texto);
+           Questao questao =  await this.questaoRepositorio.SalvarAsync(new(comando.Texto));
+            if(comando.Respostas.Count() != 4) {
+                throw new Exception("Deve haver exatamente quatro respostas.");
+            }
+            if (comando.Respostas.Where(x => x.Certa).Count() != 1) { 
+                throw new Exception("Deve haver exatamente uma resposta correta.");
+            }
+            foreach (var respostaComando in comando.Respostas)
+            {
+                RespostaQuestao resposta = new(questao, respostaComando.Texto, respostaComando.Certa);
+                questao.Respostas.Add(resposta);
+            }
             await this.questaoRepositorio.SalvarAsync(questao);
             return questao;
         }

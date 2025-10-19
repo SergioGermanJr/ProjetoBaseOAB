@@ -4,6 +4,7 @@
     {
         public virtual int Id { get; protected set; }
         public virtual string Texto { get; protected set; }
+        public virtual IList<RespostaQuestao> Respostas { get; protected set; } = new List<RespostaQuestao>();
         protected Questao() { }
 
         public Questao(string texto) {

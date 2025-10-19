@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Aplicacao.Questoes.Servicos.Interfaces;
 using DataTransfer.Questoes.Requests;
 using DataTransfer.Questoes.Response;
+using Dominio.Questoes.comandos;
 using Dominio.Questoes.Entidades;
 using Dominio.Questoes.Servicos.Interfaces;
 using Infra.Utils.UnityOfWork.Interface;
@@ -34,7 +35,12 @@ namespace Aplicacao.Questoes.Servicos
             _unitOfWork.BeginTransaction();
             try
             {
-                Questao questao = await this.questaoService.InserirAsync(request.Texto);
+                QuestaoInserirComando comando = new QuestaoInserirComando 
+                { 
+                    Texto = request.Texto, 
+                    Respostas = request.Respostas.Select(x => new RespostaQuestaoInserirComando { Certa = x.Certa, Texto = x.Texto }).ToList() 
+                };
+                Questao questao = await this.questaoService.InserirAsync(comando);
                 QuestaoResponse response = new QuestaoResponse { Texto = questao.Texto };
                 await _unitOfWork.CommitAsync();
                 return response;
