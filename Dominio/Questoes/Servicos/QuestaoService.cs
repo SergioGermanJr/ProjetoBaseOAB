@@ -20,7 +20,12 @@ namespace Dominio.Questoes.Servicos
 
         public async Task<Questao> InserirAsync(QuestaoInserirComando comando)
         {
-           Questao questao =  await this.questaoRepositorio.SalvarAsync(new(comando.Texto));
+            List<Questao> questoes = await this.questaoRepositorio.BuscarQuestoesPorTexto(comando.Texto);
+            if(questoes.Count > 0)
+            {
+                throw new Exception("Questao ja cadastrada");
+            }
+            Questao questao =  await this.questaoRepositorio.SalvarAsync(new(comando.Texto));
             if(comando.Respostas.Count() != 4) {
                 throw new Exception("Deve haver exatamente quatro respostas.");
             }
