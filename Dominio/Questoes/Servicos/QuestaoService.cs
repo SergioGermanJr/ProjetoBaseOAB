@@ -16,6 +16,13 @@ namespace Dominio.Questoes.Servicos
         {
             this.questaoRepositorio = questaoRepositorio;
         }
+
+        public async Task<Questao> InserirAsync(string texto)
+        {
+            Questao questao = new (texto);
+            await this.questaoRepositorio.SalvarAsync(questao);
+            return questao;
+        }
         public async Task<Questao> ValidarAsync(int id)
         {
             Questao questao = await this.questaoRepositorio.RecuperarAsync(id);

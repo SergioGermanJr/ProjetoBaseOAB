@@ -2,12 +2,16 @@
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Infra.Questoes.mapeamentos;
+using Infra.Utils.UnityOfWork;
+using Infra.Utils.UnityOfWork.Interface;
 using NHibernate;
 using Scrutor;
 using ISession = NHibernate.ISession;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped(factory => SessionFactory.AbrirSessao());
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var assemblies = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
     .Select(Assembly.LoadFrom)

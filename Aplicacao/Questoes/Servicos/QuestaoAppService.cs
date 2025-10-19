@@ -4,18 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aplicacao.Questoes.Servicos.Interfaces;
+using DataTransfer.Questoes.Requests;
 using DataTransfer.Questoes.Response;
 using Dominio.Questoes.Entidades;
 using Dominio.Questoes.Servicos.Interfaces;
+using Infra.Utils.UnityOfWork.Interface;
 
 namespace Aplicacao.Questoes.Servicos
 {
     public class QuestaoAppService : IQuestaoAppService
     {
         private readonly IQuestaoService questaoService;
-        public QuestaoAppService(IQuestaoService questaoService)
+        private readonly IUnitOfWork _unitOfWork;
+        public QuestaoAppService(IQuestaoService questaoService, IUnitOfWork unitOfWork)
         {
-            this.questaoService = questaoService;   
+            this.questaoService = questaoService;
+            _unitOfWork = unitOfWork;
         }
         public async Task<QuestaoResponse> ValidarAsync(int id)
         {
@@ -23,6 +27,24 @@ namespace Aplicacao.Questoes.Servicos
             return new QuestaoResponse { Texto = questao.Texto}
             ;
 
+        }
+
+        public async Task<QuestaoResponse> InserirAsync(QuestaoInserirRequest request)
+        {
+            _unitOfWork.BeginTransaction();
+            try
+            {
+                Questao questao = await this.questaoService.InserirAsync(request.Texto);
+                QuestaoResponse response = new QuestaoResponse { Texto = questao.Texto };
+                await _unitOfWork.CommitAsync();
+                return response;
+            }
+            catch
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
+            
         }
     }
 }

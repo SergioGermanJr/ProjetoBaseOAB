@@ -6,5 +6,6 @@ namespace Dominio.Questoes.Servicos.Interfaces
     public interface IQuestaoService
     {
         Task<Questao> ValidarAsync(int id);
+        Task<Questao> InserirAsync(string texto);
     }
 }

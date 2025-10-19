@@ -17,10 +17,16 @@ namespace API.Controllers.Questoes
             this.questaoAppService = questaoAppService;
         }
         [HttpGet("Id")]
-        public async Task<ActionResult> Questao(int Id) {
+        public async Task<ActionResult> Questao(int Id)
+        {
             return Ok(await questaoAppService.ValidarAsync(Id));
         }
+        [HttpPost]
+        public async Task<ActionResult> Inserir(QuestaoInserirRequest request)
+        {
+            return Ok(await questaoAppService.InserirAsync(request));
 
-        
+
+        }
     }
 }
