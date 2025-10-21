@@ -11,5 +11,7 @@ namespace Dominio.Questoes.Repositorios.Interfaces
     public interface IQuestaoRepositorio: INhibernateRepositorio<Questao>
     {
         public Task<List<Questao>> BuscarQuestoesPorTexto(string texto);
+
+        Task<Questao> QuestaoAleatoria();
     }
 }

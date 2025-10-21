@@ -12,10 +12,24 @@ namespace Infra.Questoes.repositorios
         {
         }
 
-        public Task<List<Questao>> BuscarQuestoesPorTexto(string texto)
+        public async Task<List<Questao>> BuscarQuestoesPorTexto(string texto)
         {
             texto = texto.Trim().Length >= 100 ? texto.Trim().Substring(0, 100) : texto.Trim();
-            return Query().Where(x => (x.Texto.Trim().Length >= 100 ? x.Texto.Trim().Substring(0, 100) : x.Texto) == texto).ToListAsync();
+            return await Query().Where(x => (x.Texto.Trim().Length >= 100 ? x.Texto.Trim().Substring(0, 100) : x.Texto) == texto).ToListAsync();
+        }
+
+        public async Task<Questao> QuestaoAleatoria()
+        {
+            List<int> ids = session.Query<Questao>()
+                .Select(q => q.Id)
+                .ToList();
+
+            Random random = new Random();
+            int idAleatorio = ids[random.Next(ids.Count)];
+
+            return await this.RecuperarAsync(idAleatorio);
+
+            
         }
     }
 }
