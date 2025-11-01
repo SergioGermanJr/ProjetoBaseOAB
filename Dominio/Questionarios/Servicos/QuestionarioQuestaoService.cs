@@ -26,5 +26,10 @@ namespace Dominio.Questionarios.Servicos
             return questionarioQuestao;
 
         }
+
+        public async Task<QuestionarioQuestao> AtualizarAsync(QuestionarioQuestao questionarioQuestao)
+        {
+            return await this.questionarioQuestaoRepositorio.SalvarAsync(questionarioQuestao);
+        }
     }
 }

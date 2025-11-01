@@ -1,8 +1,10 @@
 ﻿
 
 using Aplicacao.Questionarios.servicos.interfaces;
+using DataTransfer.Questionarios.Request;
 using DataTransfer.Questionarios.Response;
 using DataTransfer.Questoes.Response;
+using Dominio.Questionarios.Comandos;
 using Dominio.Questionarios.Entidades;
 using Dominio.Questionarios.Servicos.interfaces;
 using Infra.Utils.UnityOfWork.Interface;
@@ -41,6 +43,61 @@ namespace Aplicacao.Questionarios.servicos
                 return response;
              }
             catch
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
+        }
+        public async Task<QuestionarioQuestaoResponse> ResponderQuestao(QuestionarioResponderQuestaoRequest request)
+        {
+            try
+            {
+                ResponderQuestaoComando comando = new ResponderQuestaoComando { 
+                    questaoId = request.questaoId,
+                    questionarioId = request.questionarioId,
+                    respostaQuestaoId = request.respostaQuestaoId
+                };  
+                unitOfWork.BeginTransaction();
+
+                QuestionarioQuestao questionarioQuestao = await this.questionarioService.ResponderQuestao(comando);
+
+                await unitOfWork.CommitAsync();
+
+                return new QuestionarioQuestaoResponse { questaoId = questionarioQuestao.Questao.Id, respostaQuestaoId = questionarioQuestao.Resposta.Id };
+            }
+            catch
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
+        }
+
+        public async Task<QuestionarioResponse> FinalizarQuestionarioAsync(int QuestionarioId)
+        {
+            try
+            {
+                unitOfWork.BeginTransaction();
+
+                Questionario questionario = await this.questionarioService.FinalizarQuestionario(QuestionarioId);
+
+                QuestionarioResponse response = new QuestionarioResponse
+                {
+                    DataInicio = questionario.DataInicio,
+                    Status = questionario.Status,
+                    Questoes = questionario.Questoes
+                                .Select(qq => new QuestaoResponse
+                                {
+                                    Texto = qq.Questao.Texto
+                                })
+                                .ToList()
+                };
+
+                await unitOfWork.CommitAsync();
+
+                return response;
+
+            }
+            catch 
             {
                 unitOfWork.Rollback();
                 throw;
