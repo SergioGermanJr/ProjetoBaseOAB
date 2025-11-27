@@ -16,6 +16,13 @@ namespace API.Controllers.Questionarios
             this.questionarioAppService = questionarioAppService;
         }
 
+        [HttpGet]
+        public async Task<List<QuestionarioResponse>> Listar()
+        {
+            List<QuestionarioResponse> questionarios = await questionarioAppService.ListarQuestionarios();
+            return questionarios;
+        }
+
         [HttpPost]
         public async Task<QuestionarioResponse> CriarAsync([FromBody] QuestionarioInserirRequest request)
         {
