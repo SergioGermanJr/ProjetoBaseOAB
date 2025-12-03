@@ -16,7 +16,7 @@ namespace API.Controllers.Questoes
         {
             this.questaoAppService = questaoAppService;
         }
-        [HttpGet("Id")]
+        [HttpGet("{Id}")]
         public async Task<ActionResult> Questao(int Id)
         {
             return Ok(await questaoAppService.ValidarAsync(Id));

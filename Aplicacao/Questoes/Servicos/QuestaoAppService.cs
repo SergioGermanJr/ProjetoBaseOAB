@@ -25,7 +25,15 @@ namespace Aplicacao.Questoes.Servicos
         public async Task<QuestaoResponse> ValidarAsync(int id)
         {
             Questao questao =  await this.questaoService.ValidarAsync(id);
-            return new QuestaoResponse { Texto = questao.Texto}
+            return new QuestaoResponse { 
+                Id = questao.Id,
+                Texto = questao.Texto,
+                Respostas = questao.Respostas.Select(x => new RespostaResponse
+                {
+                    Id = x.Id,
+                    Texto = x.Texto
+                }).ToList()
+            }
             ;
 
         }
@@ -41,7 +49,16 @@ namespace Aplicacao.Questoes.Servicos
                     Respostas = request.Respostas.Select(x => new RespostaQuestaoInserirComando { Certa = x.Certa, Texto = x.Texto }).ToList() 
                 };
                 Questao questao = await this.questaoService.InserirAsync(comando);
-                QuestaoResponse response = new QuestaoResponse { Texto = questao.Texto };
+                QuestaoResponse response = new QuestaoResponse
+                {
+                    Id = questao.Id,
+                    Texto = questao.Texto,
+                    Respostas = questao.Respostas.Select(x => new RespostaResponse
+                    {
+                        Id = x.Id,
+                        Texto = x.Texto
+                    }).ToList()
+                };
                 await _unitOfWork.CommitAsync();
                 return response;
             }

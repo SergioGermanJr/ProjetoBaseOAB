@@ -62,6 +62,27 @@ builder.Services.AddScoped<ISession>(factory =>
     return factory.GetService<ISessionFactory>()!.OpenSession();
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFront",
+        policy => policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ngrok",
+        policy =>
+        {
+            policy.WithOrigins("https://f629e98add98.ngrok-free.app")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,6 +91,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("ngrok");
+
+
+
 
 app.UseHttpsRedirection();
 

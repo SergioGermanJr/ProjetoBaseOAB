@@ -8,6 +8,7 @@ using Dominio.Questionarios.Comandos;
 using Dominio.Questionarios.Entidades;
 using Dominio.Questionarios.Repositorios;
 using Dominio.Questionarios.Servicos.interfaces;
+using Dominio.Questoes.Entidades;
 using Infra.Utils.UnityOfWork.Interface;
 using NHibernate.Linq;
 
@@ -34,14 +35,17 @@ namespace Aplicacao.Questionarios.servicos
                 Questionario questionario = await questionarioService.InserirAsync(QuantidadeQuestoes);
                 QuestionarioResponse response = new QuestionarioResponse
                 {
+                    Id = questionario.Id,
                     DataInicio = questionario.DataInicio,
+                    Porcentagem = questionario.Porcentagem,
                     Status = questionario.Status,
                     Questoes = questionario.Questoes
-                                .Select(qq => new QuestaoResponse
-                                {
-                                    Texto = qq.Questao.Texto
-                                })
-                                .ToList()
+                    .Select(x => new QuestionarioQuestaoResponse
+                    {
+                        questaoId = x.Questao.Id,         
+                        respostaQuestaoId = x?.Resposta?.Id
+                    })
+                    .ToList()
                 };
                 await unitOfWork.CommitAsync();
                 return response;
@@ -52,6 +56,27 @@ namespace Aplicacao.Questionarios.servicos
                 throw;
             }
         }
+
+        public async Task<QuestionarioResponse> Recuperar(int codigo)
+        {
+            Questionario questionario = await this.questionarioService.ValidarAsync(codigo);
+            QuestionarioResponse response = new QuestionarioResponse
+            {
+                Id = questionario.Id,
+                DataInicio = questionario.DataInicio,
+                Porcentagem = questionario.Porcentagem,
+                Status = questionario.Status,
+                Questoes = questionario.Questoes
+                    .Select(x => new QuestionarioQuestaoResponse
+                    {
+                        questaoId = x.Questao.Id,
+                        respostaQuestaoId = x.Resposta?.Id
+                    })
+                    .ToList()
+            };
+            return response;
+
+        }
         public async Task<List<QuestionarioResponse>> ListarQuestionarios()
         {
             try
@@ -61,14 +86,17 @@ namespace Aplicacao.Questionarios.servicos
                 List<QuestionarioResponse> response = questionarios
                 .Select(q => new QuestionarioResponse
                 {
+                    Id = q.Id,
+                    Porcentagem = q.Porcentagem,
                     DataInicio = q.DataInicio,
                     Status = q.Status,
                     Questoes = q.Questoes
-                        .Select(qq => new QuestaoResponse
-                        {
-                            Texto = qq.Questao.Texto
-                        })
-                        .ToList()
+                    .Select(x => new QuestionarioQuestaoResponse
+                    {
+                        questaoId = x.Questao.Id,          
+                        respostaQuestaoId = x.Resposta?.Id
+                    })
+                    .ToList()
                 })
                 .ToList();
 
@@ -116,14 +144,17 @@ namespace Aplicacao.Questionarios.servicos
 
                 QuestionarioResponse response = new QuestionarioResponse
                 {
+                    Id = questionario.Id,
+                    Porcentagem = questionario.Porcentagem,
                     DataInicio = questionario.DataInicio,
                     Status = questionario.Status,
                     Questoes = questionario.Questoes
-                                .Select(qq => new QuestaoResponse
-                                {
-                                    Texto = qq.Questao.Texto
-                                })
-                                .ToList()
+                    .Select(x => new QuestionarioQuestaoResponse
+                    {
+                        questaoId = x.Questao.Id,
+                        respostaQuestaoId = x.Resposta?.Id
+                    })
+                    .ToList()
                 };
 
                 await unitOfWork.CommitAsync();

@@ -42,5 +42,12 @@ namespace API.Controllers.Questionarios
         {
             return Ok(await this.questionarioAppService.FinalizarQuestionarioAsync(questionarioId));
         }
+
+        [HttpGet("{Id}")]
+        public async Task<QuestionarioResponse> Recuperar(int Id)
+        {
+            return await this.questionarioAppService.Recuperar(Id);
+        }
+
     }
 }

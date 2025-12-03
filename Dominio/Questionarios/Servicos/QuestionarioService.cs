@@ -81,7 +81,9 @@ namespace Dominio.Questionarios.Servicos
             }
             questionario.SetStatus(StatusQuestionarioEnum.Completo);
             questionario.SetDataConclusao(DateTime.Now);
-            questionario.SetPorcentagem(questionario.Questoes.Count(x => x.Resposta.Certa));
+            double total = questionario.Questoes.Count();
+            double certas = questionario.Questoes.Count(x => x.Resposta.Certa);
+            questionario.SetPorcentagem((certas / total) * 100);
             await questionarioRepositorio.SalvarAsync(questionario);
             return questionario;
         }
