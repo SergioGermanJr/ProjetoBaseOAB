@@ -12,6 +12,12 @@ namespace Infra.Questoes.mapeamentos
             Table("QUESTOES");
             Id(produto => produto.Id).Column("ID");
             Map(produto => produto.Texto).Column("TEXTO");
+
+            HasMany(p => p.Respostas)
+            .KeyColumn("QUESTAOID") 
+            .Inverse()              
+            .Cascade.AllDeleteOrphan() 
+            .LazyLoad();
         }
     }
 }

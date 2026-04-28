@@ -19,18 +19,14 @@ namespace Infra.Utils.Repositorios
         {
             return session.GetAsync<T>(id);
         }
-        public virtual async Task SalvarAsync(T entidade)
+        public virtual async Task<T> SalvarAsync(T entidade)
         {
             await session.SaveOrUpdateAsync(entidade);
+            return entidade;
         }
         public virtual async Task DeletarAsync(T entidade)
         {
             await session.DeleteAsync(entidade);
-        }
-        public virtual async Task CommitAsync()
-        {
-            using var transaction = session.BeginTransaction();
-            await transaction.CommitAsync();
         }
     }
 }

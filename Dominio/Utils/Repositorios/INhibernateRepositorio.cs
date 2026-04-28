@@ -13,10 +13,8 @@ namespace Dominio.Utils.Repositorios
 
         Task<T> RecuperarAsync(int id);
 
-        Task SalvarAsync(T entidade);
+        Task<T> SalvarAsync(T entidade);
 
         Task DeletarAsync(T entidade);
-
-        Task CommitAsync();
     }
 }
